@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>제주 가족여행 가이드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 현무암(잉크)·감귤(강조)·바다(길찾기) 3색. 한 손으로 넘기는 세로 카드 타임라인 */
+:root{
+  --ink:#1F2A30;
+  --bg:#F2F5F4;
+  --surface:#FFFFFF;
+  --muted:#5D6A6F;
+  --line:#D9E1E0;
+  --accent:#E06A14;
+  --accent-soft:#FCEBDD;
+  --sea:#0F767A;
+  --sea-soft:#DDF0EF;
+  --rain:#2F62A0;
+  --rain-soft:#E3ECF7;
+  --font-display:"Black Han Sans","IBM Plex Sans KR",sans-serif;
+  --font-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E6ECEC; --bg:#11171A; --surface:#1A2227; --muted:#9AA7AB; --line:#2B363C;
+    --accent:#F2873A; --accent-soft:#3A2516; --sea:#45B5B7; --sea-soft:#15302F;
+    --rain:#86AEE0; --rain-soft:#18263A; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E6ECEC; --bg:#11171A; --surface:#1A2227; --muted:#9AA7AB; --line:#2B363C;
+  --accent:#F2873A; --accent-soft:#3A2516; --sea:#45B5B7; --sea-soft:#15302F;
+  --rain:#86AEE0; --rain-soft:#18263A; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.55;-webkit-text-size-adjust:100%}
+a{color:var(--sea)}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px 48px}
+header.top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.top-inner{max-width:640px;margin:0 auto;padding:12px 16px 0}
+.title-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+h1{font-family:var(--font-display);font-weight:400;font-size:22px;margin:0;letter-spacing:.5px}
+.sub{color:var(--muted);font-size:13px}
+nav.tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 0 10px;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;font:500 14px var(--font-body);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tab:focus-visible,.btn:focus-visible,.check input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+section.view{display:none;padding-top:16px}
+section.view.on{display:block}
+h2{font-family:var(--font-display);font-weight:400;font-size:24px;margin:4px 0 4px;text-wrap:balance}
+h3{font-size:16px;margin:0}
+.day-head{display:grid;gap:8px;margin-bottom:14px}
+.weather{display:flex;gap:8px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px}
+.weather b{white-space:nowrap}
+.timeline{display:grid;gap:10px}
+.item{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:10px;padding:12px 12px 12px 12px;display:grid;gap:6px}
+.item.meal{border-left-color:var(--accent)}
+.item.spot{border-left-color:var(--sea)}
+.item.move{border-left-color:var(--muted)}
+.item.past{opacity:.55}
+.item.now{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.row1{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.time{font-variant-numeric:tabular-nums;font-weight:700;font-size:15px;color:var(--ink);min-width:96px}
+.ttl{font-weight:700;font-size:16px}
+.badge{font-size:12px;font-weight:700;border-radius:6px;padding:1px 7px;background:var(--accent);color:#fff}
+.badge.next{background:var(--sea)}
+.memo{margin:0;padding-left:18px;color:var(--ink);font-size:14.5px}
+.memo li{margin:2px 0}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;border-radius:6px;padding:2px 8px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
+.chip.cost{background:var(--accent-soft);border-color:transparent;color:var(--ink);font-weight:500}
+.btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.btn{display:inline-flex;align-items:center;gap:4px;text-decoration:none;font-size:13.5px;font-weight:500;border-radius:8px;padding:7px 11px;background:var(--sea-soft);color:var(--sea);border:1px solid transparent}
+.btn.tel{background:var(--bg);color:var(--ink);border-color:var(--line)}
+.alt{font-size:13.5px;color:var(--muted)}
+.rainbox{background:var(--rain-soft);border-radius:10px;padding:12px;margin-top:14px;font-size:14.5px}
+.rainbox h3{color:var(--rain);margin-bottom:4px}
+.rainbox ol,.rainbox ul{margin:4px 0 0;padding-left:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
+.card h3{margin-bottom:6px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14.5px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-variant-numeric:tabular-nums}
+.check{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--line);font-size:14.5px}
+.check:first-of-type{border-top:0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--accent);flex:0 0 auto}
+.check.done span{text-decoration:line-through;color:var(--muted)}
+.small{font-size:13px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th,td{text-align:left;padding:8px 6px;border-top:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500;font-size:13px}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.total td{font-weight:700;border-top:2px solid var(--ink)}
+.foot{margin-top:24px;font-size:12.5px;color:var(--muted)}
+@media (prefers-reduced-motion: no-preference){ .item.now{transition:box-shadow .2s} }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="title-row">
+      <h1>제주 가족여행</h1>
+      <span class="sub">11.1(일) ~ 11.3(화) · 3인</span>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="일정 보기">
+      <button class="tab" role="tab" id="t-prep" data-v="prep">준비</button>
+      <button class="tab" role="tab" id="t-day1" data-v="day1">1일차 · 일</button>
+      <button class="tab" role="tab" id="t-day2" data-v="day2">2일차 · 월</button>
+      <button class="tab" role="tab" id="t-day3" data-v="day3">3일차 · 화</button>
+      <button class="tab" role="tab" id="t-budget" data-v="budget">예산</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="view" id="v-prep" aria-labelledby="t-prep">
+    <h2>출발 전 준비</h2>
+    <div class="card">
+      <h3>항공 · 렌터카 · 숙소</h3>
+      <dl class="kv">
+        <dt>가는 편</dt><dd>11.1(일) 06:20 김포 → 07:35 제주 · 트리니티항공</dd>
+        <dt>오는 편</dt><dd>11.3(화) 21:00 제주 → 김포 · 아시아나</dd>
+        <dt>탑승</dt><dd>20:45 탑승 시작 · 20:55 마감 · 20:10 보안검색</dd>
+        <dt>렌터카</dt><dd>11.1 09:00 인수 → 11.3 18:00 반납 (57시간) · 17:30 반납 목표</dd>
+        <dt>숙소</dt><dd>서귀포시 남성로128번길 37-2 (서흥동 731-62) · 입실 15:00 · 퇴실 11:00 (3일차는 07:50 출발)</dd>
+      </dl>
+      <div class="btns" style="margin-top:8px">
+        <a class="btn" href="https://map.kakao.com/link/search/%EC%84%9C%EA%B7%80%ED%8F%AC%EC%8B%9C%20%EB%82%A8%EC%84%B1%EB%A1%9C128%EB%B2%88%EA%B8%B8%2037-2">숙소 카카오맵</a>
+        <a class="btn" href="https://map.naver.com/p/search/%EC%84%9C%EA%B7%80%ED%8F%AC%EC%8B%9C%20%EB%82%A8%EC%84%B1%EB%A1%9C128%EB%B2%88%EA%B8%B8%2037-2">숙소 네이버지도</a>
+      </div>
+    </div>
+    <div class="card">
+      <h3>체크인 · 확인 전화 · 예약</h3>
+      <div id="checks-call"></div>
+    </div>
+    <div class="card">
+      <h3>챙길 것</h3>
+      <div id="checks-pack"></div>
+      <p class="small">체크 표시는 이 휴대폰에만 저장돼요.</p>
+    </div>
+  </section>
+
+  <section class="view" id="v-day1" aria-labelledby="t-day1"></section>
+  <section class="view" id="v-day2" aria-labelledby="t-day2"></section>
+  <section class="view" id="v-day3" aria-labelledby="t-day3"></section>
+
+  <section class="view" id="v-budget" aria-labelledby="t-budget">
+    <h2>예상 경비</h2>
+    <p class="small">렌터카, 연료비, 항공, 숙박은 뺀 금액이에요. 3인(어른 2, 만 6세 1) 기준 추정치입니다.</p>
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <thead><tr><th>날짜</th><th>항목</th><th style="text-align:right">예상</th></tr></thead>
+        <tbody>
+          <tr><td>1일차</td><td>공항 아침 2~3만 · 목장 체험 0.5만 · 국수 점심 2.5~3만 · 감귤체험 1만 · 장보기 5~7만 · 정방폭포 0.5만</td><td class="num">11.5~15만</td></tr>
+          <tr><td>2일차</td><td>쇠소깍 테우 1.5~3만 · 칼국수 점심 3만 · 에코랜드 4.7~5.7만 · 간식 0~1만 · 회·아들 먹을거리 4~5만</td><td class="num">13~18만</td></tr>
+          <tr><td>3일차</td><td>9.81파크 2인 4.45만 · 국수 점심 2.5~3만 · 카페 0~1만 · 공항 저녁 3~4만</td><td class="num">10~12.5만</td></tr>
+          <tr class="total"><td>합계</td><td></td><td class="num">약 35~46만</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>아끼는 방법</h3>
+      <ul class="memo">
+        <li>에코랜드: 신한카드로 결제하면 현장 할인 (3인 57,000원 → 47,000원)</li>
+        <li>2일차 회: 매운탕거리를 챙겨달라고 해서 숙소에서 끓이기 (약 1만 원 절약)</li>
+        <li>회 주문 전 무게(kg)와 총액 먼저 확인하기</li>
+        <li>수산대전 상품권 · 온누리상품권 받는 가게가 있어요</li>
+        <li>2일차 오전에 비가 오면 쇠소깍을 빼서 1.5~3만 원이 줄어요</li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="foot">요금·운영시간·날씨는 2026년 10월 30일에 확인한 정보예요. 현장 사정에 따라 바뀔 수 있어요.</p>
+</main>
+
+<script>
+(function(){
+  var K = function(n,lat,lng){return {n:n,lat:lat,lng:lng};};
+  var Q = function(n,q){return {n:n,q:q};};
+
+  var DAYS = [
+  {id:'day1', date:'2026-11-01', title:'1일차 · 11월 1일(일)', route:'공항 → 박물관 → 목장 → 516도로 → 감귤 → 서귀포',
+   weather:'대체로 흐림, 15~18시부터 비 예보 (10/29 기상청)',
+   items:[
+    {s:'06:20',e:'07:35',k:'move',t:'김포 → 제주',m:['모바일 체크인, 수하물 없이 바로 보안검색','아들 신분 확인용 주민등록등본(정부24) 준비']},
+    {s:'07:50',e:'08:40',k:'meal',t:'공항에서 아침',m:['렌터카하우스 파리바게뜨 (06:00 오픈, 좌석 많음, 셔틀 타는 곳 바로 옆)','또는 1층 아워홈 푸디움 (07:00 오픈, 한식)'],c:'2~3만 원',nav:[K('렌터카하우스 파리바게뜨',33.5047552,126.4922768)]},
+    {s:'08:40',e:'09:00',k:'move',t:'렌터카 셔틀 → 인수',m:['5번 게이트 쪽 렌터카하우스에서 셔틀','카시트(부스터) 장착 확인']},
+    {s:'09:20',e:'10:20',k:'spot',t:'국립제주박물관',m:['무료, 실내. 실감영상실과 어린이박물관','목장이 10시에 열어서 시간 맞추기용'],tags:['무료','실내'],nav:[K('국립제주박물관',33.5134213,126.5487245)]},
+    {s:'10:40',e:'11:40',k:'spot',t:'아침미소목장',m:['송아지 우유 주기 3,000원 · 먹이주기 2,000원','10:00~17:00, 화요일 휴무'],c:'약 5천 원',tags:['야외'],nav:[K('아침미소목장',33.4544416,126.5866129)]},
+    {s:'11:50',e:'12:40',k:'meal',t:'점심 · 만세국수 제주본점',m:['고기국수, 매일 09:00~21:00'],alt:'대안: 재혁이네국수 (동네 국수집, 영업시간 확인)',c:'2.5~3만 원',nav:[K('만세국수 제주본점',33.4941591,126.5187824),K('재혁이네국수',33.4894016,126.5331148)]},
+    {s:'12:50',e:'13:30',k:'move',t:'516도로로 서귀포 이동',m:['숲 터널 드라이브 구간']},
+    {s:'13:30',e:'14:30',k:'spot',t:'감귤박물관 · 감귤따기',m:['입장 1,500원 + 체험 약 5,000원 (약 1kg, 2025년 기준)','11월 초라 초록빛이 남은 귤일 수 있어요','10/31에 체험 운영 여부 전화 확인'],c:'약 1만 원',tel:'064-760-6400',nav:[K('감귤박물관',33.2715236,126.6076604)]},
+    {s:'14:40',e:'15:00',k:'move',t:'장보기 · 서귀포농협 하나로마트',m:['1일차 저녁 흑돼지, 2·3일차 아침, 간식, 쌈채소, 밥','516도로 끝, 08:30~22:00, 무료주차'],c:'5~7만 원',nav:[K('서귀포농협 하나로마트',33.2574007,126.5801617)]},
+    {s:'15:00',e:'15:20',k:'move',t:'숙소 입실',m:['서귀포시 남성로128번길 37-2'],navQ:[Q('숙소','서귀포시 남성로128번길 37-2')]},
+    {s:'15:30',e:'16:20',k:'spot',t:'정방폭포 (비 안 오면)',m:['바다로 바로 떨어지는 폭포, 17:20 마감','비가 오면 2일차 아침 9시로 미루기'],c:'약 5천 원',tags:['야외'],nav:[K('정방폭포',33.2448567,126.5715794)]},
+    {s:'18:00',e:'20:00',k:'meal',t:'저녁 · 숙소에서 흑돼지 굽기',m:['마트에서 산 재료로 취사']}
+   ],
+   rain:{h:'비가 일찍 오면',l:['감귤박물관은 실내 전시가 있어 그대로 진행','정방폭포는 2일차 아침 9시(쇠소깍 가기 전)로 옮기기']}
+  },
+  {id:'day2', date:'2026-11-02', title:'2일차 · 11월 2일(월)', route:'쇠소깍 → 녹차동굴 → 하트나무 → 교래 → 에코랜드 → 올레시장',
+   weather:'오전 흐리고 비 60%, 오후 비 20% (10/29 기상청 중기예보)',
+   items:[
+    {s:'08:30',e:'09:00',k:'move',t:'아침 · 날씨 확인',m:['비가 오면 아래 "비가 오면" 일정으로']},
+    {s:'09:15',e:'10:15',k:'spot',t:'쇠소깍 · 테우(뗏목)',m:['뱃사공이 저어주는 테우가 가족에게 맞아요','요금 확인 필요 (최근 후기 1인 약 1만 원)','동절기 운영이 일찍 끝나서 오전에','2·3주차장 무료'],c:'1.5~3만 원',tel:'064-732-1562',tags:['야외'],nav:[K('쇠소깍',33.2523471,126.6238624)]},
+    {s:'10:55',e:'11:30',k:'spot',t:'성읍녹차동굴',m:['주차장에서 녹차밭 따라 15~20분 걸어가면 동굴','무료, 09:00~17:30','내비: 오늘은 녹차한잔'],tags:['무료','야외'],nav:[K('오늘은 녹차한잔',33.3818399,126.7911221)]},
+    {s:'11:45',e:'11:55',k:'spot',t:'하트나무(토끼나무) 사진',m:['녹산로 목장 입구, 가시리 3197-1','갓길 주차, 10분'],tags:['무료','야외'],nav:[K('하트나무 가시리',33.3729049,126.7532605)]},
+    {s:'12:20',e:'13:00',k:'meal',t:'점심 · 교래곶자왈손칼국수',m:['가장 저렴하게, 칼국수','양이 많다는 후기, 1인 1메뉴 기준으로 생각하기','월 10:00~18:00 (목 휴무)'],alt:'대안: 원조교래손칼국수 (월 10:30~17:00)',c:'약 3만 원',nav:[K('교래곶자왈손칼국수',33.434683,126.6762078),K('원조교래손칼국수',33.4362437,126.6757682)]},
+    {s:'13:10',e:'17:00',k:'spot',t:'에코랜드',m:['기차로 숲을 도는 테마파크','막차 17:40 (예전 자료, 전화로 확인)','신한카드 현장 할인: 성인 17,000 · 어린이 13,000'],c:'4.7~5.7만 원',tel:'064-802-8020',tags:['야외'],nav:[K('에코랜드',33.4465682,126.6670507)]},
+    {s:'17:00',e:'17:50',k:'move',t:'서귀포로 복귀',m:[]},
+    {s:'18:20',e:'19:00',k:'meal',t:'올레시장 · 회 포장',m:['회 주문 먼저 (손질 시간 걸림): 바다수산 · 통큰수산 · 올레강민','기다리는 동안 아들 먹을거리 (꽁치김밥, 분식 등)','매운탕거리 챙겨줄 수 있는지 물어보기','주문 전 무게와 총액 확인'],c:'4~5만 원',nav:[K('서귀포매일올레시장',33.2487163,126.5640617),K('바다수산',33.248408,126.5630997),K('통큰수산',33.2486638,126.5635312),K('올레강민',33.248349,126.5629234)]},
+    {s:'19:15',e:'20:00',k:'meal',t:'숙소 베란다 오션뷰 저녁',m:['밤바다 바람이 차요. 아이 겉옷']},
+    {s:'20:00',e:'20:50',k:'spot',t:'새연교 야경 (선택)',m:['숙소에서 가까움, 무료, 다리 조명 산책'],tags:['무료','야외'],nav:[K('새연교',33.2382692,126.5591697)]},
+    {s:'21:00',e:'21:15',k:'move',t:'아시아나 모바일 체크인',m:['내일 21:00 제주 → 김포 편, 출발 24시간 전부터 가능','체크인 후 모바일 탑승권을 휴대폰에 저장']}
+   ],
+   rain:{h:'비가 오면 (오전 8시 30분에 판단)',l:['쇠소깍은 생략 (테우가 운항하지 않을 수 있어요)','10:30 숙소에서 천천히 출발','성읍녹차마을 오늘은 녹차한잔 카페 (실내): 1층 족욕 체험장, 2층 카페','비가 그치면 녹차동굴, 하트나무 → 교래 점심 → 에코랜드 (오후에 갤 예보)']}
+  },
+  {id:'day3', date:'2026-11-03', title:'3일차 · 11월 3일(화)', route:'9.81파크 → 협재 → 한담 → 도두봉 → 반납 → 공항',
+   weather:'맑음 10%, 최저 11도 · 최고 17도, 쌀쌀함 (10/29 기상청 중기예보)',
+   items:[
+    {s:'07:00',e:'07:50',k:'move',t:'기상 · 아침 · 짐 정리',m:['전날 밤에 짐 미리 싸두기','9.81파크 앱 설치, 안전영상 미리 보기']},
+    {s:'07:50',e:'08:40',k:'move',t:'퇴실 · 9.81파크로 출발',m:['짐은 차에 실어두기','약 45~50분']},
+    {s:'09:00',e:'11:00',k:'spot',t:'9.81파크 · 2인 무제한',m:['08:40까지 도착','2인승 카트, 부모 1명 운전 + 아들 동승 (키 100cm 이상)','다른 한 명은 카페·전망 공간에서'],c:'44,500원',tel:'1833-9810',tags:['야외'],nav:[K('9.81파크',33.3899391,126.3663248)]},
+    {s:'11:30',e:'12:30',k:'spot',t:'협재해수욕장',m:['간조가 11시 전후로 추정돼서 바위 웅덩이 생물 찾기 좋은 시간','모래놀이, 파도 피하기, 비양도 사진','아쿠아슈즈, 여벌옷, 작은 통'],tags:['무료','야외'],nav:[K('협재해수욕장',33.3942945,126.2398813)]},
+    {s:'12:30',e:'13:20',k:'meal',t:'점심 · 협재신국수',m:['협재 바로 옆, 화 09:00~17:30'],alt:'대안: 난춘식당 (화 10:00~17:00)',c:'2.5~3만 원',nav:[K('협재신국수',33.3950265,126.2487124),K('난춘식당 협재본점',33.4033434,126.2524704)]},
+    {s:'13:40',e:'14:20',k:'spot',t:'애월 한담해안산책로',m:['해안 산책, 카페 거리'],tags:['무료','야외'],nav:[K('한담해안산책로',33.4591293,126.3103796)]},
+    {s:'14:45',e:'15:45',k:'spot',t:'도두봉 · 무지개해안도로',m:['도두봉은 약 10분이면 정상, 공항 이착륙이 보여요','무지개색 해안 방호벽에서 사진'],tags:['무료','야외'],nav:[K('도두봉',33.508095,126.468593)],navQ:[Q('무지개해안도로','제주 무지개해안도로')]},
+    {s:'15:45',e:'16:45',k:'move',t:'여유 시간',m:['근처 카페에서 쉬기 또는 이호테우해변 말 등대 산책']},
+    {s:'16:45',e:'17:30',k:'move',t:'주유 → 렌터카 반납',m:['반납 시 받은 만큼 연료 채우기','차고지에서 공항까지 셔틀']},
+    {s:'18:00',e:'19:20',k:'spot',t:'공항 4층 전망대',m:['4층 식당가 카페 옆 통로, 05:00~22:00','야외라 바람, 겉옷 필수'],tags:['무료'],nav:[K('제주공항 전망대',33.5070314,126.4937798)]},
+    {s:'19:20',e:'20:05',k:'meal',t:'저녁 · 공항 4층 식당가',m:['아워홈 푸디움 · 1950 에어차이나 (21시 마감)'],c:'3~4만 원',nav:[K('아워홈 푸디움',33.5069986,126.4925302)]},
+    {s:'20:10',e:'20:45',k:'move',t:'보안검색 → 탑승구',m:['모바일 탑승권, 신분증, 아들 등본']},
+    {s:'20:45',e:'21:00',k:'move',t:'탑승 (20:55 마감) → 21:00 출발',m:['아시아나, 제주 → 김포']}
+   ],
+   rain:{h:'날씨가 바뀌면',l:['9.81파크는 비·강풍 때 레이싱이 중단될 수 있어요. 예약 화면의 환불 규정 확인','협재 바람이 세면 짧게 들르고 도두봉·공항 쪽으로 일찍 이동']}
+  }];
+
+  var CALLS = [
+    {id:'c6',t:'10/31(토) 06:20 트리니티항공 모바일 체크인 (가는 편, 출발 24시간 전)'},
+    {id:'c7',t:'11/2(월) 21:00 아시아나 모바일 체크인 (오는 편, 출발 24시간 전부터 가능)'},
+    {id:'c1',t:'감귤박물관 11/1 감귤따기 운영 여부',tel:'064-760-6400'},
+    {id:'c2',t:'쇠소깍 테우 요금과 11/2 운항 여부',tel:'064-732-1562'},
+    {id:'c3',t:'에코랜드 11월 막차 시간',tel:'064-802-8020'},
+    {id:'c4',t:'9.81파크 2인 무제한(11/3 09:00) 예약 · 우천 환불 · 운전자 교대 가능 여부',tel:'1833-9810'},
+    {id:'c5',t:'10/31(토) 저녁 최신 날씨 예보 확인'}
+  ];
+  var PACK = [
+    {id:'p1',t:'모바일 탑승권 · 신분증'},
+    {id:'p2',t:'아들 주민등록등본 (정부24 앱에 저장)'},
+    {id:'p3',t:'아쿠아슈즈 또는 샌들'},
+    {id:'p4',t:'아이 여벌 바지 · 양말 · 수건'},
+    {id:'p5',t:'모래놀이 삽 · 양동이 · 작은 투명통'},
+    {id:'p6',t:'바람막이 · 겉옷 (3일차 최저 11도)'},
+    {id:'p7',t:'렌터카 카시트(부스터) 옵션'},
+    {id:'p8',t:'신한카드 (에코랜드 할인)'},
+    {id:'p9',t:'9.81파크 앱 설치'}
+  ];
+
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function kakaoTo(p){return p.lat ? 'https://map.kakao.com/link/to/'+encodeURIComponent(p.n)+','+p.lat+','+p.lng : 'https://map.kakao.com/link/search/'+encodeURIComponent(p.q);}
+  function naver(p){return 'https://map.naver.com/p/search/'+encodeURIComponent(p.q||p.n);}
+  function mins(hm){var a=hm.split(':');return (+a[0])*60+(+a[1]);}
+
+  function renderDay(d){
+    var el=document.getElementById('v-'+d.id);
+    var h='<div class="day-head"><h2>'+esc(d.title)+'</h2><div class="small">'+esc(d.route)+'</div>'+
+      '<div class="weather"><b>날씨</b><span>'+esc(d.weather)+'</span></div></div><div class="timeline">';
+    d.items.forEach(function(it,i){
+      h+='<article class="item '+it.k+'" data-s="'+it.s+'" data-e="'+it.e+'" id="'+d.id+'-'+i+'">';
+      h+='<div class="row1"><span class="time">'+it.s+' – '+it.e+'</span><span class="ttl">'+esc(it.t)+'</span><span class="slot"></span></div>';
+      if(it.m && it.m.length){h+='<ul class="memo">'+it.m.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>';}
+      if(it.alt){h+='<div class="alt">'+esc(it.alt)+'</div>';}
+      var chips='';
+      if(it.c){chips+='<span class="chip cost">'+esc(it.c)+'</span>';}
+      (it.tags||[]).forEach(function(t){chips+='<span class="chip">'+esc(t)+'</span>';});
+      if(chips){h+='<div class="chips">'+chips+'</div>';}
+      var b='';
+      (it.nav||[]).forEach(function(p){
+        var lbl=(it.nav.length>1)?p.n:'';
+        b+='<a class="btn" href="'+kakaoTo(p)+'">카카오맵 길찾기'+(lbl?' · '+esc(lbl):'')+'</a>';
+        if(it.nav.length===1){b+='<a class="btn" href="'+naver(p)+'">네이버지도</a>';}
+      });
+      (it.navQ||[]).forEach(function(p){
+        b+='<a class="btn" href="'+kakaoTo(p)+'">카카오맵 · '+esc(p.n)+'</a><a class="btn" href="'+naver(p)+'">네이버지도 · '+esc(p.n)+'</a>';
+      });
+      if(it.tel){b+='<a class="btn tel" href="tel:'+it.tel.replace(/-/g,'')+'">전화 '+esc(it.tel)+'</a>';}
+      if(b){h+='<div class="btns">'+b+'</div>';}
+      h+='</article>';
+    });
+    h+='</div>';
+    if(d.rain){h+='<div class="rainbox"><h3>'+esc(d.rain.h)+'</h3><ol>'+d.rain.l.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ol></div>';}
+    el.innerHTML=h;
+  }
+  DAYS.forEach(renderDay);
+
+  var store={};
+  try{store=JSON.parse(localStorage.getItem('jeju2026-check')||'{}');}catch(e){store={};}
+  function save(){try{localStorage.setItem('jeju2026-check',JSON.stringify(store));}catch(e){}}
+  function renderChecks(list,boxId){
+    var box=document.getElementById(boxId);
+    box.innerHTML=list.map(function(x){
+      var on=!!store[x.id];
+      var tel=x.tel?' <a href="tel:'+x.tel.replace(/-/g,'')+'">'+esc(x.tel)+'</a>':'';
+      return '<label class="check'+(on?' done':'')+'" for="ck-'+x.id+'"><input type="checkbox" id="ck-'+x.id+'" data-id="'+x.id+'"'+(on?' checked':'')+'><span>'+esc(x.t)+tel+'</span></label>';
+    }).join('');
+    box.addEventListener('change',function(ev){
+      var t=ev.target; if(!t.dataset||!t.dataset.id) return;
+      store[t.dataset.id]=t.checked; save();
+      t.parentNode.classList.toggle('done',t.checked);
+    });
+  }
+  renderChecks(CALLS,'checks-call');
+  renderChecks(PACK,'checks-pack');
+
+  function nowKST(){
+    try{
+      var f=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+      var parts={}; f.formatToParts(new Date()).forEach(function(p){parts[p.type]=p.value;});
+      var hh=parts.hour==='24'?'00':parts.hour;
+      return {date:parts.year+'-'+parts.month+'-'+parts.day, min:(+hh)*60+(+parts.minute)};
+    }catch(e){var d=new Date();return {date:'',min:d.getHours()*60+d.getMinutes()};}
+  }
+  function markNow(){
+    var n=nowKST();
+    DAYS.forEach(function(d){
+      var arts=document.querySelectorAll('#v-'+d.id+' .item');
+      var nextDone=false;
+      arts.forEach(function(a){
+        a.classList.remove('past','now');
+        var slot=a.querySelector('.slot'); slot.innerHTML='';
+        if(d.date!==n.date) return;
+        var s=mins(a.dataset.s), e=mins(a.dataset.e);
+        if(n.min>=e){a.classList.add('past');}
+        else if(n.min>=s){a.classList.add('now');slot.innerHTML='<span class="badge">지금</span>';nextDone=true;}
+        else if(!nextDone){slot.innerHTML='<span class="badge next">다음</span>';nextDone=true;}
+      });
+    });
+    return n;
+  }
+
+  var VIEWS=['prep','day1','day2','day3','budget'];
+  function show(v,push){
+    if(VIEWS.indexOf(v)<0) v='prep';
+    VIEWS.forEach(function(x){
+      document.getElementById('v-'+x).classList.toggle('on',x===v);
+      document.getElementById('t-'+x).setAttribute('aria-selected',x===v?'true':'false');
+    });
+    if(push){try{history.replaceState(null,'','#'+v);}catch(e){location.hash=v;}}
+    try{localStorage.setItem('jeju2026-tab',v);}catch(e){}
+  }
+  document.querySelectorAll('.tab').forEach(function(b){
+    b.addEventListener('click',function(){show(b.dataset.v,true);window.scrollTo(0,0);});
+  });
+
+  var n=markNow();
+  var start=(location.hash||'').replace('#','');
+  if(VIEWS.indexOf(start)<0){
+    var byDate={'2026-11-01':'day1','2026-11-02':'day2','2026-11-03':'day3'};
+    start=byDate[n.date]||'';
+    if(!start){try{start=localStorage.getItem('jeju2026-tab')||'';}catch(e){start='';}}
+    if(VIEWS.indexOf(start)<0) start='prep';
+  }
+  show(start,false);
+  window.addEventListener('hashchange',function(){show((location.hash||'').replace('#',''),false);});
+  setInterval(markNow,60000);
+})();
+</script>
+</body>
+</html>
